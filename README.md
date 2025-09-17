@@ -34,37 +34,29 @@
 - 🔧 **デバッグ簡単** - ローカル実行なのでログ確認やデバッグが容易
 - 🎨 **実験しやすい** - コード変更して即座に再起動して試せる
 
-## 🚨 重要: NPMセキュリティ警告
+## 🚨 重要: NPMセキュリティ警告（2025年1月）
 
-**現在、npmエコシステムで大規模なサプライチェーン攻撃が発生中です（2025年1月）**
+### 現在の状況
+npmエコシステムで大規模なサプライチェーン攻撃が発生中のため、以下の対応が必須です。
 
-### 必須対応事項
-```bash
-# ✅ 安全な依存関係インストール
-npm ci  # package-lock.jsonに従ってインストール
+| コマンド | 状態 | 説明 |
+|---------|------|------|
+| `npm ci` | ✅ **使用必須** | package-lock.jsonの内容のみインストール（安全） |
+| `npm install` | ❌ **使用禁止** | 新しいパッケージを取得する可能性があり危険 |
+| `npm update` | ❌ **使用禁止** | パッケージ更新は攻撃リスクあり |
+| `npm install <pkg>` | ❌ **使用禁止** | 新規パッケージ追加は事態収束まで禁止 |
 
-# ❌ 絶対に実行しないでください
-npm install  # 新しいパッケージ取得の可能性
-npm update   # パッケージ更新は危険
-```
+### 📋 このプロジェクトの安全性
+✅ **2025年1月16日確認済み**: 攻撃対象パッケージは含まれていません  
+✅ **package-lock.json**: クリーンな状態を維持  
+✅ **即座に利用可能**: 上記ルールを守れば安全に使用できます
 
-### プロジェクトの安全性確認済み
-- ✅ 攻撃対象パッケージ（@ctrl/tinycolor等）は含まれていません
-- ✅ package-lock.jsonは清浄です
-- ✅ CI/CDパイプラインは設定されていません
-
-### セキュリティガイドライン
-1. **package-lock.jsonの変更を絶対にコミットしない**
-2. **新しいパッケージ追加は事態収束まで禁止**
-3. **環境変数とシークレットをローテーション推奨**
-4. **疑わしい動作があれば即座に報告**
-
-詳細: [BleepingComputer記事](https://www.bleepingcomputer.com/news/security/self-propagating-supply-chain-attack-hits-187-npm-packages/)
+詳細: [BleepingComputer - NPMサプライチェーン攻撃記事](https://www.bleepingcomputer.com/news/security/self-propagating-supply-chain-attack-hits-187-npm-packages/)
 
 ## 📋 必要条件
 
 - Node.js 18.0.0以上
-- npm (npm ci コマンドのみ使用)
+- npm（`npm ci`コマンドのみ使用）
 - Slack Workspace管理者権限（App作成用）
 - Dify APIアクセス
 - インターネット接続（Slack/Dify API通信用）
@@ -81,8 +73,7 @@ cd slack-dify-bridge
 ### 2. 依存関係のインストール
 
 ```bash
-# 🚨 セキュリティ警告: npm installは使用禁止
-npm ci  # 必ずnpm ciを使用してください
+npm ci  # package-lock.jsonに従った安全なインストール
 ```
 
 ### 3. 環境変数の設定
@@ -212,7 +203,7 @@ Botとの1対1チャットで直接メッセージを送信
 ### Botが応答しない
 
 1. `.env`の設定を確認
-2. `npm run dev`でログを確認
+2. `npm run dev`でログを確認（事前に`npm ci`実行済みか確認）
 3. Slack AppのSocket Modeが有効か確認
 
 ### "Configuration errors"が表示される
@@ -250,6 +241,9 @@ npm run typecheck
 
 # クリーンビルド
 npm run clean && npm run build
+
+# ⚠️ 注意: 新しいパッケージ追加は禁止
+# npm install <package>  # 使用しないでください
 ```
 
 ## 🆕 更新履歴
