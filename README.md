@@ -34,10 +34,37 @@
 - 🔧 **デバッグ簡単** - ローカル実行なのでログ確認やデバッグが容易
 - 🎨 **実験しやすい** - コード変更して即座に再起動して試せる
 
+## 🚨 重要: NPMセキュリティ警告
+
+**現在、npmエコシステムで大規模なサプライチェーン攻撃が発生中です（2025年1月）**
+
+### 必須対応事項
+```bash
+# ✅ 安全な依存関係インストール
+npm ci  # package-lock.jsonに従ってインストール
+
+# ❌ 絶対に実行しないでください
+npm install  # 新しいパッケージ取得の可能性
+npm update   # パッケージ更新は危険
+```
+
+### プロジェクトの安全性確認済み
+- ✅ 攻撃対象パッケージ（@ctrl/tinycolor等）は含まれていません
+- ✅ package-lock.jsonは清浄です
+- ✅ CI/CDパイプラインは設定されていません
+
+### セキュリティガイドライン
+1. **package-lock.jsonの変更を絶対にコミットしない**
+2. **新しいパッケージ追加は事態収束まで禁止**
+3. **環境変数とシークレットをローテーション推奨**
+4. **疑わしい動作があれば即座に報告**
+
+詳細: [BleepingComputer記事](https://www.bleepingcomputer.com/news/security/self-propagating-supply-chain-attack-hits-187-npm-packages/)
+
 ## 📋 必要条件
 
 - Node.js 18.0.0以上
-- npm または yarn
+- npm (npm ci コマンドのみ使用)
 - Slack Workspace管理者権限（App作成用）
 - Dify APIアクセス
 - インターネット接続（Slack/Dify API通信用）
@@ -54,7 +81,8 @@ cd slack-dify-bridge
 ### 2. 依存関係のインストール
 
 ```bash
-npm install
+# 🚨 セキュリティ警告: npm installは使用禁止
+npm ci  # 必ずnpm ciを使用してください
 ```
 
 ### 3. 環境変数の設定
